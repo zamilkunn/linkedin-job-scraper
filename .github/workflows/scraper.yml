@@ -30,7 +30,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          SEARCH_KEYWORDS: ${{ secrets.SEARCH_KEYWORDS || 'administration staff,data entry,operational support,management trainee,general affairs,document control' }}
+          SEARCH_KEYWORDS: ${{ secrets.SEARCH_KEYWORDS || 'fresh graduate administration,data entry staff,management trainee,operational staff,junior project coordinator,general affairs staff' }}
           SEARCH_LOCATION: ${{ secrets.SEARCH_LOCATION || 'Indonesia' }}
         run: |
           python main.py

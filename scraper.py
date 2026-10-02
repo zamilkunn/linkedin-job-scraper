@@ -74,16 +74,38 @@ class LinkedInScraper:
         time.sleep(delay)
 
     def _build_search_url(self, keyword: str, start: int = 0) -> str:
-        """Build LinkedIn job search URL."""
+        """Build LinkedIn job search URL with Entry Level and Internship filters."""
         params = {
             "keywords": keyword,
             "location": self.config.SEARCH_LOCATION,
             "start": start,
             "f_TPR": "r86400",   # last 24 hours
+            "f_E": "1,2",        # 1 = Internship, 2 = Entry level (Fresh Graduate)
             "position": 1,
             "pageNum": 0,
         }
         return f"{self.config.LINKEDIN_JOBS_URL}?{urlencode(params)}"
+
+    def _is_relevant_job(self, title: str) -> bool:
+        """Filter out irrelevant, senior, or specialized language jobs."""
+        title_lower = title.lower()
+        
+        # Blacklist irrelevant titles / languages / senior roles
+        blacklist = [
+            "mandarin", "korean", "japanese", "senior", "sr.", "lead", "head", 
+            "manager", "supervisor", "direktur", "director", "vp", "chief",
+            "medical", "doctor", "dokter", "nurse", "perawat", "bilingual", "driver", "supir"
+        ]
+        
+        # Allow management trainee even if it contains "trainee"
+        for bad in blacklist:
+            # exception: Management Trainee or MT is good
+            if bad in ("manager", "lead") and "trainee" in title_lower:
+                continue
+            if bad in title_lower:
+                return False
+                
+        return True
 
     def _parse_job_card(self, card: BeautifulSoup, keyword: str) -> JobListing | None:
         """Parse a single job card HTML element into a JobListing."""
@@ -122,6 +144,11 @@ class LinkedInScraper:
             description_snippet = snippet_el.get_text(strip=True) if snippet_el else ""
 
             if not title:
+                return None
+
+            # Filter out irrelevant or mismatched titles
+            if not self._is_relevant_job(title):
+                logger.debug(f"Skipping irrelevant title: {title}")
                 return None
 
             return JobListing(

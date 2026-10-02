@@ -15,12 +15,11 @@ class Config:
     TELEGRAM_BOT_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
     TELEGRAM_CHAT_ID: str = os.getenv("TELEGRAM_CHAT_ID", "")
 
-    # Search
     SEARCH_KEYWORDS: list[str] = [
         kw.strip()
         for kw in os.getenv(
             "SEARCH_KEYWORDS",
-            "administration staff,data entry,operational support,management trainee,general affairs,document control"
+            "fresh graduate administration,data entry staff,management trainee,operational staff,junior project coordinator,general affairs staff"
         ).split(",")
     ]
     SEARCH_LOCATION: str = os.getenv("SEARCH_LOCATION", "Indonesia")
