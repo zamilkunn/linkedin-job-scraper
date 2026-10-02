@@ -3,6 +3,7 @@ LinkedIn Job Scraper - Telegram Notifier Module
 Sends job listing notifications to a Telegram chat.
 """
 
+import asyncio
 import logging
 from datetime import datetime
 
