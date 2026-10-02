@@ -29,7 +29,7 @@ jobs:
       - name: Run Job Scraper & Send Telegram Alert
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || '7834706916,@loker_zamil_id' }}
           GOOGLE_SHEET_WEBHOOK_URL: ${{ secrets.GOOGLE_SHEET_WEBHOOK_URL }}
           SEARCH_KEYWORDS: ${{ secrets.SEARCH_KEYWORDS || 'fresh graduate administration,data entry staff,management trainee,operational staff,junior project coordinator,general affairs staff' }}
           SEARCH_LOCATION: ${{ secrets.SEARCH_LOCATION || 'Indonesia' }}
