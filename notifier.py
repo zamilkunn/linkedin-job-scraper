@@ -34,33 +34,39 @@ class TelegramNotifier:
         return self._bot
 
     async def send_message(self, text: str) -> bool:
-        """Send a text message to the configured Telegram chat."""
+        """Send a text message to all configured Telegram chats / channels."""
         if not self.is_configured:
             logger.warning("Telegram not configured. Skipping notification.")
             return False
 
-        try:
-            bot = self._get_bot()
-            await bot.send_message(
-                chat_id=self.config.TELEGRAM_CHAT_ID,
-                text=text,
-                parse_mode=ParseMode.MARKDOWN,
-                disable_web_page_preview=True,
-            )
-            return True
-        except Exception as e:
-            logger.warning(f"Markdown send failed ({e}), trying plain text...")
+        targets = self.config.telegram_chat_ids
+        if not targets:
+            return False
+
+        all_ok = True
+        bot = self._get_bot()
+
+        for target in targets:
             try:
-                bot = self._get_bot()
                 await bot.send_message(
-                    chat_id=self.config.TELEGRAM_CHAT_ID,
+                    chat_id=target,
                     text=text,
+                    parse_mode=ParseMode.MARKDOWN,
                     disable_web_page_preview=True,
                 )
-                return True
-            except Exception as e2:
-                logger.error(f"Failed to send Telegram message: {e2}")
-                return False
+            except Exception as e:
+                logger.warning(f"Markdown send failed for {target} ({e}), trying plain text...")
+                try:
+                    await bot.send_message(
+                        chat_id=target,
+                        text=text,
+                        disable_web_page_preview=True,
+                    )
+                except Exception as e2:
+                    logger.error(f"Failed to send Telegram message to {target}: {e2}")
+                    all_ok = False
+
+        return all_ok
 
     async def notify_jobs(self, jobs: list[JobListing], batch_size: int = 5) -> int:
         """

@@ -15,6 +15,11 @@ class Config:
     TELEGRAM_BOT_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
     TELEGRAM_CHAT_ID: str = os.getenv("TELEGRAM_CHAT_ID", "")
 
+    @property
+    def telegram_chat_ids(self) -> list[str]:
+        """Return list of target chat IDs / channel usernames."""
+        return [cid.strip() for cid in self.TELEGRAM_CHAT_ID.split(",") if cid.strip()]
+
     # Google Sheets Tracker Webhook
     GOOGLE_SHEET_WEBHOOK_URL: str = os.getenv("GOOGLE_SHEET_WEBHOOK_URL", "")
 
