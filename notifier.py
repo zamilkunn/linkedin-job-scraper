@@ -105,6 +105,9 @@ class TelegramNotifier:
             if await self.send_message(message):
                 sent_count += 1
 
+            # Small delay between messages to respect Telegram broadcast limits
+            await asyncio.sleep(1.5)
+
         # Send footer
         footer = f"✅ Total: {len(jobs)} lowongan | Scraping berikutnya dalam {self.config.SCRAPE_INTERVAL_MINUTES} menit"
         if await self.send_message(footer):
