@@ -34,14 +34,20 @@ class JobListing:
     def to_dict(self) -> dict:
         return asdict(self)
 
-    def summary(self) -> str:
-        """Return a short summary for Telegram notification."""
+    def summary(self, webhook_url: str = "") -> str:
+        """Return a short summary for Telegram notification with direct apply & track links."""
+        links = f"🔗 [Buka Lowongan]({self.job_url})"
+        if webhook_url:
+            from sheets_tracker import generate_tracking_url
+            track_url = generate_tracking_url(webhook_url, self.title, self.company, self.location, self.job_url)
+            links += f" │ 📝 [Catat ke Sheets]({track_url})"
+
         return (
             f"💼 *{self.title}*\n"
             f"🏢 {self.company}\n"
             f"📍 {self.location}\n"
             f"📅 {self.date_posted}\n"
-            f"🔗 [Lihat Lowongan]({self.job_url})"
+            f"{links}"
         )
 
 

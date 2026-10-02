@@ -93,7 +93,7 @@ class TelegramNotifier:
             message_parts = []
 
             for idx, job in enumerate(batch, start=i + 1):
-                message_parts.append(f"*{idx}.* {job.summary()}")
+                message_parts.append(f"*{idx}.* {job.summary(self.config.GOOGLE_SHEET_WEBHOOK_URL)}")
 
             message = "\n\n".join(message_parts)
             if await self.send_message(message):

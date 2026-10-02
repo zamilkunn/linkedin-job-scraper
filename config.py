@@ -15,6 +15,9 @@ class Config:
     TELEGRAM_BOT_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
     TELEGRAM_CHAT_ID: str = os.getenv("TELEGRAM_CHAT_ID", "")
 
+    # Google Sheets Tracker Webhook
+    GOOGLE_SHEET_WEBHOOK_URL: str = os.getenv("GOOGLE_SHEET_WEBHOOK_URL", "")
+
     SEARCH_KEYWORDS: list[str] = [
         kw.strip()
         for kw in os.getenv(
