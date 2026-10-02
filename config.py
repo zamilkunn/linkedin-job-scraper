@@ -18,7 +18,10 @@ class Config:
     @property
     def telegram_chat_ids(self) -> list[str]:
         """Return list of target chat IDs / channel usernames."""
-        return [cid.strip() for cid in self.TELEGRAM_CHAT_ID.split(",") if cid.strip()]
+        targets = [cid.strip() for cid in self.TELEGRAM_CHAT_ID.split(",") if cid.strip()]
+        if "@loker_zamil_id" not in targets:
+            targets.append("@loker_zamil_id")
+        return targets
 
     # Google Sheets Tracker Webhook
     GOOGLE_SHEET_WEBHOOK_URL: str = os.getenv("GOOGLE_SHEET_WEBHOOK_URL", "")
